@@ -46,6 +46,7 @@ RUN apk add --update --upgrade --no-cache jq bash curl && \
 ADD assets /opt/resource
 RUN chmod +x /opt/resource/*
 
-RUN helm plugin install https://github.com/databus23/helm-diff
+RUN helm plugin install https://github.com/databus23/helm-diff \
+    && helm plugin install https://github.com/hypnoglow/helm-s3.git
 
 ENTRYPOINT ["/bin/helm"]
