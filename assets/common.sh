@@ -24,16 +24,6 @@ generate_awscli_kubeconfig() {
   export AWS_SECRET_ACCESS_KEY=$aws_secret_access_key 
   export AWS_DEFAULT_REGION=$aws_region
   export AWS_REGION=$aws_region
-  echo "##############################################################################################################"
-  echo "##############################################################################################################"
-  echo "##################################### using creds ############################################################"
-  echo "# AWS_ACCESS_KEY_ID = "$AWS_ACCESS_KEY_ID
-  echo "# AWS_SECRET_ACCESS_KEY = "$AWS_SECRET_ACCESS_KEY
-  echo "# AWS_DEFAULT_REGION = "$AWS_DEFAULT_REGION
-  echo "# AWS_REGION = "$AWS_REGION
-  echo "##############################################################################################################"
-  echo "##############################################################################################################"
-  echo "##############################################################################################################"
   local aws_eks_cluster_name
   aws_eks_cluster_name="$(jq -r '.source.aws_eks_cluster_name // ""' < "$payload")"
   aws eks update-kubeconfig --name $aws_eks_cluster_name
