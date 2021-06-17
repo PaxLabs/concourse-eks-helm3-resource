@@ -1,4 +1,5 @@
 #!/bin/bash
+
 set -e
 
 generate_awscli_kubeconfig() {
@@ -29,6 +30,18 @@ generate_awscli_kubeconfig() {
   aws eks update-kubeconfig --name $aws_eks_cluster_name
 }
 
+setup_repos() {
+  repos=$(jq -c '(try .params.repos[] catch [][])' < $payload)
+  if [ "$repos" ]; then
+    for r in $repos; do
+      name=$(echo $r | jq -r '.name')
+      url=$(echo $r | jq -r '.url')
+      echo Installing helm repository $name $url
+      helm repo add $name $url
+    done
+    helm repo update
+  fi
+}
 
 setup_kubernetes() {
   payload=$1
@@ -55,5 +68,7 @@ wait_for_service_up() {
 setup_resource() {
   echo "Initializing kubectl..."
   setup_kubernetes $1 $2
-  echo "setup done"
+  echo "Setting up repos..."
+  setup_repos
+  echo "Setup complete."
 }

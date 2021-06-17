@@ -17,6 +17,8 @@ cat > $payload <&0
 setup_resource $payload $source
 echo "Resource setup successful."
 
+setup_repos
+
 # Parse parameters
 namespace=$(jq -r '.source.namespace // "default"' < $payload)
 chart=$(jq -r '.params.chart // ""' < $payload)
@@ -47,6 +49,7 @@ if [ -z "$chart" ]; then
     exit 1
   fi
 fi
+
 
 if [ -f "$source/$namespace_file" ]; then
   namespace=`cat $source/$namespace_file`
